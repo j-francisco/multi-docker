@@ -1,0 +1,21 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t jfrancisco777/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true jfrancisco777/react-test yarn test
+
+after_success:
+  - docker build -t jfrancisco777/multi-client ./client
+  - docker build -t jfrancisco777/multi-nginx ./nginx
+  - docker build -t jfrancisco777/multi-server ./server
+  - docker build -t jfrancisco777/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push jfrancisco777/multi-client
+  - docker push jfrancisco777/multi-nginx
+  - docker push jfrancisco777/multi-server
+  - docker push jfrancisco777/multi-worker
