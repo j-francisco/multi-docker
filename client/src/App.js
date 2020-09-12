@@ -19,6 +19,7 @@ function App() {
           </nav>
         </header>
         <div>
+          <h1>Fib Calculator</h1>
           <Switch>
             <Route path="/otherpage">
               <OtherPage />
